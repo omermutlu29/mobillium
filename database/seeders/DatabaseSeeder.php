@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Article;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -16,7 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(PointSeeder::class);
         $this->call(RoleSeeder::class);
-        \App\Models\User::factory(10)->create()->each(function ($user) {
+        User::factory(10)->create()->each(function ($user) {
             $user->roles()->attach([4]);
             if (rand(0, 10) > 3) {
                 $user->roles()->attach([3]);
