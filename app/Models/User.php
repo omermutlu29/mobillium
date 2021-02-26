@@ -52,4 +52,14 @@ class User extends Authenticatable
     public function articles(){
         return $this->hasMany(Article::class,'author_id');
     }
+
+    public function hasRole($pRole){
+        foreach ($this->roles()->get() as $role){
+            if ($role->name == $pRole)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
 }
