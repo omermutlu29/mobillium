@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -41,11 +40,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function roles(){
-        return $this->belongsToMany(Role::class);
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class,'user_roles');
     }
 
-    public function default_role(){
-        return $this->belongsTo(Role::class,'default_role');
+    public function points(){
+        return $this->belongsToMany(Article::class,'article_points')->withPivot(['article_id']);
+    }
+
+    public function articles(){
+        return $this->hasMany(Article::class,'author_id');
     }
 }
