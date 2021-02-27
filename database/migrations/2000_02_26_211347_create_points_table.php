@@ -15,7 +15,7 @@ class CreatePointsTable extends Migration
     {
         Schema::create('points', function (Blueprint $table) {
             $table->id();
-            $table->integer('point');
+            $table->integer('point')->unique();
             $table->timestamps();
         });
     }

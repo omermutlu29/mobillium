@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [\App\Http\Controllers\Web\ArticleController::class,'index'])->name('web.article.index');
+Route::get('/article/{article}', [\App\Http\Controllers\Web\ArticleController::class,'show'])->name('web.article.show');
+Route::post('/article/rate/{article}', [\App\Http\Controllers\Web\ArticleController::class,'rate'])->name('web.article.rate');
 
 Auth::routes();
 

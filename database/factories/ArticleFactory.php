@@ -23,7 +23,7 @@ class ArticleFactory extends Factory
     {
         return [
             'title' => $this->faker->realText(100),
-            'body' => $this->faker->randomHtml(6),
+            'body' => $this->faker->paragraph(5),
             'published'=>$this->faker->boolean(50),
         ];
     }

@@ -18,8 +18,7 @@ class CreateArticlePointsTable extends Migration
             $table->foreignId('user_id')->references('id')->on('users');
             $table->foreignId('article_id')->references('id')->on('articles');
             $table->foreignId('point_id')->references('id')->on('points');
-            $table->integer('point');
-            $table->unique(['user_id','article_id']);
+            $table->unique(['user_id','article_id','point_id']);
             $table->timestamps();
         });
     }

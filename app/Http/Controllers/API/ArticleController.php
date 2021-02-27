@@ -9,22 +9,17 @@ use Illuminate\Support\Facades\Validator;
 
 class ArticleController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function __construct()
     {
-        Article::all();
+        $this->middleware('auth:api');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
+    public function index()
+    {
+        return $this->sendResponse(Article::with('author')->get(), 'Makaleler Getirildi!');
+    }
+
     public function store(Request $request)
     {
         if (!(Auth::user()->hasRole('writer') || Auth::user()->hasRole('admin') || Auth::user()->hasRole('moderator'))) {
@@ -47,29 +42,54 @@ class ArticleController extends BaseController
         return $this->sendResponse($article, 'Veriler başarı ile kaydedildi!');
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         $article = Article::find($id);
         if (!$article) {
             return $this->sendError('Makale buluamadı!');
         }
+        if (Auth::user()->hasRole('writer') && $article->author_id != Auth::id()) {
+            return $this->sendError('Yetkisiz erişim', 'Yetkisiz erişim');
+        }
+        if (!(Auth::user()->hasRole('admin') || Auth::user()->hasRole('moderator'))) {
+            return $this->sendError('Yetkisiz erişim', 'Yetkisiz erişim');
+        }
+
+        $input = $request->all();
+        $article->fill($input)->save();
+        return $this->sendResponse($article, 'Başarı ile güncellendi!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        //
+        $article = Article::find($id);
+        if (!$article) {
+            return $this->sendError('Makale buluamadı!');
+        }
+        if (Auth::user()->hasRole('writer') && $article->author_id != Auth::id()) {
+            return $this->sendError('Yetkisiz erişim', 'Yetkisiz erişim');
+        }
+        if (!(Auth::user()->hasRole('admin') || Auth::user()->hasRole('moderator'))) {
+            return $this->sendError('Yetkisiz erişim', 'Yetkisiz erişim');
+        }
+        $article->delete();
+        return $this->sendResponse([], 'makale silindi!');
+    }
+
+    public function unpublish($id)
+    {
+        $article = Article::find($id);
+        if (!$article) {
+            return $this->sendError('Makale buluamadı!');
+        }
+        if (Auth::user()->hasRole('writer') && $article->author_id != Auth::id()) {
+            return $this->sendError('Yetkisiz erişim', 'Yetkisiz erişim');
+        }
+        if (!(Auth::user()->hasRole('admin') || Auth::user()->hasRole('moderator'))) {
+            return $this->sendError('Yetkisiz erişim', 'Yetkisiz erişim');
+        }
+        $article->published = false;
+        $article->save();
+        return $this->sendResponse($article, 'Yayından kalktı!');
     }
 }
