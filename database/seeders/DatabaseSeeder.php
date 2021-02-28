@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(PointSeeder::class);
         $this->call(RoleSeeder::class);
+        $this->call(UserSeeder::class);
         User::factory(10)->create()->each(function ($user) {
             $user->roles()->attach([4]);
             if (rand(0, 10) > 3) {
