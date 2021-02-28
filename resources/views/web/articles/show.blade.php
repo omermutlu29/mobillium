@@ -4,10 +4,11 @@
         <div class="row justify-content-center">
             <div class="col-md-8">
                 <div class="card">
+                    <h3>Article Show</h3>
+
                     <div class="card-header">Rate: {{($article->getAverageRatingAttribute())}}
                         <br>{{$article->author->name}}
                         <br>{{$article->title}} </div>
-
 
                     <div class="card-body">
                         {!! $article->body !!}

@@ -12,7 +12,7 @@
                                 <div class="row justify-content-center">
                                     <div class="col-md-8">
                                         <div class="card">
-                                            <div class="card-header">Author : {{$article->author->name}} <br><a
+                                            <div class="card-header">Author : {{$article->author->name}} <br><a class="link-to-article"
                                                     href="{{route('web.article.show',$article->id)}}">{{$article->title}}</a>
                                             </div>
                                             <div class="card-body">

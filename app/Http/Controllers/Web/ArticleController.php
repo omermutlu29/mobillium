@@ -23,7 +23,7 @@ class ArticleController extends Controller
 
     public function index()
     {
-        $articles = Article::with('author')->where('published', true)->paginate(3);
+        $articles = Article::with("author:id,name,email")->where('published', true)->paginate(3);
         return view('web.articles.index', compact('articles'));
     }
 
